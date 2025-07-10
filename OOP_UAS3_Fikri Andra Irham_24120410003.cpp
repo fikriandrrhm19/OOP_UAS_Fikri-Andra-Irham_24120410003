@@ -241,16 +241,38 @@ int main() {
     Club fcCakrawala("CLUB01", "FC Cakrawala", "2025-07-10", stadion);
     Team timMuda("TEAM-U23", "FC Cakrawala Muda", "CLUB01");
 
-    Coach* headCoach = new Coach("C001", "Fikri", "Guardiola", "2005-09-19", "Indonesia", "UEFA Pro", "Head Coach");
-    Coach* asstCoach = new Coach("C002", "Andra", "Kidd", "1999-09-09", "Indonesia", "AFC A", "Assistant Coach");
+    CoachFactory coachFactory;
+    PlayerFactory playerFactory;
+
+    map<string, string> headCoachDetails = {
+        {"id", "C001"}, {"firstName", "Fikri"}, {"lastName", "Guardiola"},
+        {"dob", "2005-09-19"}, {"nation", "Indonesia"},
+        {"license", "UEFA Pro"}, {"role", "Head Coach"}
+    };
+    Person* headCoachPerson = fcCakrawala.recruitPerson(coachFactory, headCoachDetails);
+    Coach* headCoach = static_cast<Coach*>(headCoachPerson);
+
+    map<string, string> asstCoachDetails = {
+        {"id", "C002"}, {"firstName", "Andra"}, {"lastName", "Kidd"},
+        {"dob", "1999-09-09"}, {"nation", "Indonesia"},
+        {"license", "AFC A"}, {"role", "Assistant Coach"}
+    };
+    Person* asstCoachPerson = fcCakrawala.recruitPerson(coachFactory, asstCoachDetails);
+    Coach* asstCoach = static_cast<Coach*>(asstCoachPerson);
 
     timMuda.setCoach(headCoach);
 
     vector<Player*> daftarPemain;
     for (int i = 1; i <= 15; ++i) {
-        string namaPemain = (i == 1) ? "Irham" : "Pemain";
-        string margaPemain = (i == 1) ? "Lionel" : to_string(i);
-        Player* p = new Player("P" + to_string(i), namaPemain, margaPemain, "2001-01-01", "Indonesia", i, "All-rounder");
+        map<string, string> playerDetails = {
+            {"id", "P" + to_string(i)},
+            {"firstName", (i == 1) ? "Irham" : "Pemain"},
+            {"lastName", (i == 1) ? "Lionel" : to_string(i)},
+            {"dob", "2001-01-01"}, {"nation", "Indonesia"},
+            {"jerseyNumber", to_string(i)}, {"position", "All-rounder"}
+        };
+        Person* playerPerson = fcCakrawala.recruitPerson(playerFactory, playerDetails);
+        Player* p = static_cast<Player*>(playerPerson);
         daftarPemain.push_back(p);
         timMuda.addPlayer(p);
     }
@@ -260,7 +282,7 @@ int main() {
     fcCakrawala.printClubInfo();
     fcCakrawala.getTeam(0).printTeamInfo();
 
-    cout<<"\n--- Simulasi Aktivitas ---"<<endl;
+    cout << "\n--- Simulasi Aktivitas ---" << endl;
     headCoach->conductTraining();
     daftarPemain[0]->playMatch();
 
