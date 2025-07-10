@@ -149,12 +149,46 @@ class Club {
             cout<<"--------------------------"<<endl;
         }
     };
-class Sponsor {};
-class Contract {};
-class TrainingSession {};
-class Match {};
-class Season {};
+
+class Sponsor { string sponsorId, name; public: Sponsor(string id, string n):sponsorId(id), name(n){} };
+class Contract { string contractId; public: Contract(string id):contractId(id){} };
+class TrainingSession { string sessionId; public: TrainingSession(string id):sessionId(id){} };
+class Match { string matchId; public: Match(string id):matchId(id){} };
+class Season { string seasonId; public: Season(string id):seasonId(id){} };
 
 int main() {
+    Stadium stadion("STAD01", "Stadion Cakrawala", 5000, "Jl. Kemang Timur No.1, RT.14/RW.8, Pejaten Bar., Ps. Minggu, Kota Jakarta Selatan, DKI Jakarta 12510");
+    Club fcCakrawala("CLUB01", "FC Cakrawala", "2025-07-10", stadion);
+    Team timMuda("TEAM-U23", "FC Cakrawala Muda", "CLUB01");
+
+    Coach* headCoach = new Coach("C001", "Fikri", "Guardiola", "2005-09-19", "Indonesia", "UEFA Pro", "Head Coach");
+    Coach* asstCoach = new Coach("C002", "Andra", "Kidd", "1999-09-09", "Indonesia", "AFC A", "Assistant Coach");
+
+    timMuda.setCoach(headCoach);
+
+    vector<Player*> daftarPemain;
+    for (int i = 1; i <= 15; ++i) {
+        string namaPemain = (i == 1) ? "Irham" : "Pemain";
+        string margaPemain = (i == 1) ? "Lionel" : to_string(i);
+        Player* p = new Player("P" + to_string(i), namaPemain, margaPemain, "2001-01-01", "Indonesia", i, "All-rounder");
+        daftarPemain.push_back(p);
+        timMuda.addPlayer(p);
+    }
+
+    fcCakrawala.addTeam(timMuda);
+
+    fcCakrawala.printClubInfo();
+    fcCakrawala.getTeam(0).printTeamInfo();
+
+    cout<<"\n--- Simulasi Aktivitas ---"<<endl;
+    headCoach->conductTraining();
+    daftarPemain[0]->playMatch();
+
+    delete headCoach;
+    delete asstCoach;
+    for (Player* p : daftarPemain) {
+        delete p;
+    }
+
     return 0;
 }
