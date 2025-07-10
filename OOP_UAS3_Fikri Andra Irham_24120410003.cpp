@@ -69,6 +69,27 @@ class Staff : public Person {
         void performDuties() { cout<<getFullName()<<" sedang bekerja di "<<department<<"."<<endl; }
     };
 
+class PersonFactory {
+    public:
+        virtual ~PersonFactory() {}
+        virtual Person* createPerson(map<string, string>& details) const = 0;
+    };
+
+class PlayerFactory : public PersonFactory {
+    public:
+        Person* createPerson(map<string, string>& details) const override {
+            int jerseyNumber = stoi(details["jerseyNumber"]);
+            return new Player(details["id"], details["firstName"], details["lastName"], details["dob"], details["nation"], jerseyNumber, details["position"]);
+        }
+    };
+
+class CoachFactory : public PersonFactory {
+    public:
+        Person* createPerson(map<string, string>& details) const override {
+            return new Coach(details["id"], details["firstName"], details["lastName"], details["dob"], details["nation"], details["license"], details["role"]);
+        }
+    };
+
 class Stadium {
     private:
         string stadiumId;
