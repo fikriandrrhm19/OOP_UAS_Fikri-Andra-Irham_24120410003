@@ -223,6 +223,9 @@ class Club {
         list<Team> getTeams() { return list<Team>(); }
         void addTeam(const Team& team) { teams.push_back(team); }
         Team& getTeam(int index) { return teams.at(index); }
+        Person* recruitPerson(const PersonFactory& factory, map<string, string>& details) {
+            return factory.createPerson(details);
+        }
         void printClubInfo() {
             cout<<"\n------- Info Klub -------"<<endl;
             cout<<"Nama: "<<this->name<<" (ID: "<<this->clubId<<")"<<endl;
